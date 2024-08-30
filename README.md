@@ -12,6 +12,9 @@ Core functionality:
 
 - ```train_test.py```: to train/test generated (IMAGE) 3-D dimensional data with Computer Vision Classification models.
 
+# Installation:
+    pip install -r requirements.txt
+
 # 📖 Tutorial:
 
 1. Download [EPHNOGRAM](https://physionet.org/content/ephnogram/1.0.0/) dataset from official link, and unzip (if any).
