@@ -11,8 +11,6 @@ from torchmetrics import Accuracy
 from PIL import Image
 from sklearn.model_selection import train_test_split
 
-from .model import AlexNet
-
 CHECKPOINT_FOLDER = './work_dir'
 
 GROUND_TRUTH_TEXT_LABELS = {
@@ -56,6 +54,7 @@ LABEL_IDS = {"ECGPCG0059": 1, "ECGPCG0060": 1, "ECGPCG0061": 1, "ECGPCG0062": 1,
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Hyperparameters
+model = 'alex'
 num_epochs = 20
 batch_size = 16
 learning_rate = 0.001
@@ -113,12 +112,24 @@ class ECGPCGDataset(Dataset):
 
             return image, int(self.labels[idx])
 
+# Model initialization
+if model.lower() == 'alexnet':
+    from model import AlexNet
+    model = AlexNet()
+    image_size = 227
+else:
+    from model import VisionTransformer
+    model = VisionTransformer()
+    image_size = 256
+
+model.to(device)
+
 # Load and preprocess data
 train_data, test_data, train_labels, test_labels = load_process_data()
 
 # Create datasets and dataloaders
 transform = transforms.Compose([
-    transforms.Resize((227, 227)),
+    transforms.Resize((image_size, image_size)),
     transforms.RandomHorizontalFlip(p=0.5),
     transforms.RandomVerticalFlip(p=0.5),
     transforms.RandomRotation(degrees=30),
@@ -133,8 +144,6 @@ test_dataset = ECGPCGDataset(test_data, test_labels, transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-# Model initialization
-model = AlexNet().to(device)
 accuracy = Accuracy(task='multiclass', num_classes=6).to(device)
 
 # Loss function and optimizer

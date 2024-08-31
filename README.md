@@ -11,7 +11,9 @@ Core functionality:
 - ```model.py```: contain Computer Vision models (E.g: AlexNet).
 
 - ```train_test.py```: to train/test generated (IMAGE) 3-D dimensional data with Computer Vision Classification models.
-
+# Supported Models:
+- CNN-based models: ```AlexNet```
+- Transformer-based models: ```Vision Transformer (ViT)```
 # Installation:
     pip install -r requirements.txt
 

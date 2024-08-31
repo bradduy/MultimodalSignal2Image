@@ -36,3 +36,22 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         x = F.softmax(x, dim=1)  # Add softmax activation function
         return x
+
+class VisionTransformer(nn.Module):
+    def __init__(self, num_classes=6, image_size=256):
+        super(VisionTransformer, self).__init__()
+        from vit_pytorch import ViT
+        self.VisionTransformer = ViT(
+            image_size = image_size,
+            patch_size = 32,
+            num_classes = 6,
+            dim = 1024,
+            depth = 6,
+            heads = 16,
+            mlp_dim = 2048,
+            dropout = 0.1,
+            emb_dropout = 0.1
+        )
+
+    def forward(self, x):
+        return self.VisionTransformer(x)
